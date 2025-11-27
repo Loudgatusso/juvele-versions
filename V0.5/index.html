@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JUVELE - Moda Feminina</title>
+    <!--ICONE DA PÁGINA -->
+    <link rel="shortcut icon" href="fav.ico" />
+    <link rel="stylesheet" href="styles/styles.css" />
+    <link rel="stylesheet" href="styles/produtos-destaques.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap"
+        rel="stylesheet">
+    <style>
+        /* Faixa de categorias deslizável (touch + drag) */
+        .categorias-wrapper {
+            margin: 0 0 16px 0;
+        }
+
+        .categorias {
+            display: flex;
+            gap: 10px;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            scroll-snap-type: x mandatory;
+            padding: 8px 4px;
+        }
+
+        .categorias::-webkit-scrollbar {
+            display: none;
+        }
+
+        .categoria {
+            scroll-snap-align: start;
+            white-space: nowrap;
+            padding: 8px 12px;
+            background: #ffffff;
+            border-radius: 40px;
+            border: 1px solid #FF5C8A;
+            text-decoration: none;
+            color: #333;
+            font-size: 14px;
+            flex: 0 0 auto;
+        }
+
+        .categoria:focus,
+        .categoria:hover {
+            background: #e9e9e9;
+            outline: none;
+        }
+
+        /* Ajuste para telas maiores: centralizar categorias */
+        @media (min-width: 668px) {
+            .categorias-wrapper {
+                display: flex;
+                justify-content: center;
+            }
+
+            .categorias {
+                /* permite scroll horizontal mesmo em telas maiores */
+                justify-content: flex-start;
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+                scroll-snap-type: x mandatory;
+                padding: 12px 16px;
+                max-width: 1000px;
+                margin: 0 auto;
+                gap: 12px;
+            }
+
+            /* opcional: mostrar uma barra fina em navegadores WebKit (ou remover se preferir esconder) */
+            .categorias::-webkit-scrollbar {
+                height: 8px;
+            }
+
+            .categorias::-webkit-scrollbar-thumb {
+                background: rgba(0, 0, 0, 0.15);
+                border-radius: 8px;
+            }
+
+            .categoria {
+                /* mantém itens sem ocupar toda a largura */
+                flex: 0 0 auto;
+            }
+        }
+
+        /* Estilos para o overlay do menu */
+        .menu-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            display: none;
+            z-index: 999;
+        }
+
+        /* Exibir o overlay quando o menu estiver aberto */
+        .menu-aberto .menu-overlay {
+            display: block;
+        }
+
+        /* Centralizar categorias se houver poucas (<=5) mesmo em telas pequenas */
+        .categorias.few-categories {
+            justify-content: center;
+        }
+    </style>
+
+</head>
+
+<body>
+    <!--PARTE DE CIMA Titulo, logotipo e Navbar-->
+    <header>
+        <nav>
+            <div class="logo">
+                <h1>JUVELE</h1>
+            </div>
+            <ul id="menuList">
+                <li><a href="./index.html" id="op1"></a></li>
+                <li><a href="#categoriasList" id="op2"></a></li>
+                <li><a href="" id="op3"></a></li>
+                <li><a href="" id="op4"></a></li>
+                <li><a href="" id="op5"></a></li>
+            </ul>
+            <div class="search-icon">
+                <i class="fa-solid fa-search"></i>
+            </div>
+            <div class="menu-icon">
+                <i class="fa-solid fa-bars" onclick="toggleMenu()"></i>
+            </div>
+        </nav>
+        <!-- Overlay para escurecimento em mobile -->
+        <div id="menuOverlay" class="menu-overlay"></div>
+    </header>
+
+
+    <div class="search-icon" aria-hidden="true">
+        <!-- mantenha seu ícone atual aqui (ex.: <i class="fa fa-search"></i>) -->
+    </div>
+
+
+    <form id="siteSearch" class="search-bar" role="search" aria-label="Pesquisar no site" onsubmit="return false;">
+        <input id="searchInput" type="search" placeholder="Pesquisar..." aria-label="Pesquisar" />
+        <button id="searchSubmit" type="button" aria-label="Buscar">Buscar</button>
+        <div id="searchResults" class="search-results" role="listbox" aria-hidden="true"></div>
+    </form>
+    <!--BANNER PROMOCIONAL-->
+    <div class="promotion">
+        <div class="promo-text">
+            Vista-se de elegância. <n>
+                <small>Descubra a nova coleção primavera-verão 25</small>
+        </div>
+    </div>
+    <div class="faixatop">
+        <p class="faixa-item active">PAGUE PARCELADO EM ATÉ 6X SEM JUROS</p>
+        <p class="faixa-item">FRETE GRÁTIS PARA TODOS OS PRODUTOS DA LOJA.</p>
+        <p class="faixa-item">COMPRA 100% SEGURA</p>
+    </div>
+
+    <!-- ============================
+         SEÇÃO: PRODUTOS EM DESTAQUE
+         Será preenchida dinamicamente a partir de produtos.json
+         ============================ -->
+    <section id="destaques" class="produtos-destaque" aria-labelledby="destaques-title">
+        <!-- Faixa de categorias deslizável -->
+        <div class="categorias-wrapper" aria-label="Categorias de produtos">
+            <div id="categoriasList" class="categorias" role="list" tabindex="0"
+                aria-label="Categorias (deslize para ver mais)">
+                <!-- Categorias serão inseridas dinamicamente -->
+            </div>
+        </div>
+        <h2 id="destaques-title">Produtos em Destaque</h2>
+        <div class="container">
+            <div id="produtosContainer" class="produtos-container" role="list"></div>
+            <div id="produtosErro" class="produtos-erro" role="status" aria-live="polite" hidden>
+                Não foi possível carregar os produtos no momento.
+            </div>
+        </div>
+    </section>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity=""
+        crossorigin="anonymous">
+    <script src="./src/nav.js"></script>
+    <script src="./src/produto-destaque.js"></script>
+    <script src="./src/pr-def.js"></script>
+    <script src="./src/faixatop.js"></script>
+    <script>
+        // Estado para controlar se a barra de pesquisa está aberta
+        let searchBarOpen = false;
+
+        // Carregar categorias dinamicamente de categorias.json
+        fetch('./data/categorias.json')
+            .then(response => response.json())
+            .then(data => {
+                const categoriasList = document.getElementById('categoriasList');
+                categoriasList.innerHTML = '';
+                data.categorias.forEach(cat => {
+                    const nomeLimpo = cat.nome.trim().toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/\s+/g, '-');
+                    const href = `categoria-${nomeLimpo}.html`;
+                    const a = document.createElement('a');
+                    a.className = 'categoria';
+                    a.setAttribute('role', 'listitem');
+                    a.href = href;
+                    a.textContent = cat.nome.trim().toUpperCase();
+                    categoriasList.appendChild(a);
+                });
+                // Centralizar se poucas categorias
+                if (data.categorias.length <= 5) {
+                    categoriasList.classList.add('few-categories');
+                } else {
+                    categoriasList.classList.remove('few-categories');
+                }
+            })
+            .catch(() => {
+                const categoriasList = document.getElementById('categoriasList');
+                categoriasList.innerHTML = '<span style="color:red;">Não foi possível carregar as categorias.</span>';
+            });
+
+        // Função para abrir/fechar o menu
+        function toggleMenu() {
+            // Se a barra de pesquisa estiver aberta, feche-a antes de abrir o menu
+            if (searchBarOpen) {
+                searchBarOpen = false;
+                searchInput.blur();
+                document.getElementById('searchResults').setAttribute('aria-hidden', 'true');
+            }
+            // Alterna a classe do body para abrir/fechar o menu
+            document.body.classList.toggle('menu-aberto');
+            // Atualiza overlay conforme estado do menu
+            if (document.body.classList.contains('menu-aberto')) {
+                // Se o menu foi aberto, overlay deve aparecer SEMPRE
+                menuOverlay.style.display = 'block';
+            } else {
+                menuOverlay.style.display = 'none';
+            }
+        }
+
+        // Fecha o menu automaticamente ao clicar fora ou rolar a página
+        document.addEventListener('click', (e) => {
+            if (
+                document.body.classList.contains('menu-aberto') &&
+                !e.target.closest('nav') &&
+                !e.target.closest('.menu-icon')
+            ) {
+                document.body.classList.remove('menu-aberto');
+                menuOverlay.style.display = 'none';
+            }
+        });
+
+        window.addEventListener('scroll', () => {
+            if (document.body.classList.contains('menu-aberto')) {
+                document.body.classList.remove('menu-aberto');
+                menuOverlay.style.display = 'none';
+            }
+        });
+
+        const searchInput = document.getElementById('searchInput');
+        const searchBar = document.getElementById('siteSearch');
+        const searchSubmit = document.getElementById('searchSubmit');
+        const menuOverlay = document.getElementById('menuOverlay');
+
+        // Quando a barra de pesquisa é focada, feche o menu e o overlay
+        searchInput.addEventListener('focus', () => {
+            searchBarOpen = true;
+            document.body.classList.remove('menu-aberto');
+            // Situação específica: se o menu estava aberto, o overlay deve sumir imediatamente
+            menuOverlay.style.display = 'none';
+        });
+
+        // Quando o botão de busca é clicado, feche o menu e o overlay
+        searchSubmit.addEventListener('click', () => {
+            searchBarOpen = false;
+            document.body.classList.remove('menu-aberto');
+            // Situação específica: se o menu estava aberto, o overlay deve sumir imediatamente
+            menuOverlay.style.display = 'none';
+        });
+
+        // ATENÇÃO PARA O OVERLAY:
+        // Quando a barra de pesquisa está aberta e o usuário chama o menu,
+        // o sistema automaticamente fecha a barra de pesquisa e abre o menu.
+        // Nessa situação, o overlay pode aparecer normalmente, sem medo:
+        // isso significa que o menu está realmente aberto e a pesquisa foi fechada.
+        // O overlay só deve sumir imediatamente quando a pesquisa for ativada
+        // enquanto o menu estava aberto (caso inverso).
+    </script>
+</body>
+
+</html>
