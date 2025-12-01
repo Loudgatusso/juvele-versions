@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JUVELE - Moda Feminina</title>
+    <link rel="stylesheet" href="./assets/styles/base-fundamental.css">
+    <link rel="shortcut icon" href="./assets/images/site-icon/fav.ico" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="./assets/styles/search-produto-card.css">
+    <!-- CORREÇÃO: apontar para o arquivo correto de estilos da página de busca -->
+    <link rel="stylesheet" href="./assets/styles/searchpage.css">
+    <link rel="stylesheet" href="./assets/styles/footer(global).css">
+    <link rel="stylesheet" href="./assets/styles/categorias0x1.css">
+
+    <!-- mover Font Awesome para o head -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+        crossorigin="anonymous">
+</head>
+
+<body>
+
+    <!--PARTE DE CIMA Titulo, logotipo e Navbar-->
+    <header class="search-header">
+        <h1 class="search-title">Resultados da busca</h1>
+
+        <p class="search-description">Encontre os produtos perfeitos para você! Filtre por categoria ou navegue pelas
+            sugestões abaixo.</p>
+        <div class="categorias-wrapper" aria-label="Categorias de produtos">
+            <div id="categoriasList" class="categorias" role="list" tabindex="0"
+                aria-label="Categorias (deslize para ver mais)">
+                <div class="search-icon" aria-hidden="true">
+                    <!-- NAV removido: será injetado por ../nav(globalcode).js -->
+    </header>
+
+    <!-- mantenha seu ícone atual aqui (ex.: <i class="fa fa-search"></i>) -->
+    </div>
+
+    <form id="siteSearch" class="search-bar" role="search" aria-label="Pesquisar no site" onsubmit="return false;">
+        <input id="searchInput" type="search" placeholder="Pesquisar..." aria-label="Pesquisar" />
+        <button id="searchSubmit" type="button" aria-label="Buscar">Buscar</button>
+        <div id="searchResults" class="search-results" role="listbox" aria-hidden="true"></div>
+    </form>
+
+    <div class="container">
+        <div id="produtosContainer" class="produtos-container" role="list"></div>
+        <div id="produtosErro" class="produtos-erro" role="status" aria-live="polite" hidden>
+            Não foi possível carregar os produtos no momento.
+        </div>
+        <!-- PAGINAÇÃO -->
+        <div id="pagination" class="pagination" aria-label="Paginação de produtos">
+            <button id="prevPage" class="pagination-btn" disabled>&lt; Anterior</button>
+            <span id="paginationInfo" class="pagination-info">1 de 1</span>
+            <button id="nextPage" class="pagination-btn" disabled>Próximo &gt;</button>
+        </div>
+    </div>
+
+
+    <!-- Container para os cartões de produto (será preenchido pelo script abaixo) -->
+    <main id="searchResultsContainer" class="products-grid" aria-live="polite"></main>
+
+    <!-- pr-def deve ser carregado antes de nav.js -->
+    <script src="./assets/javascript/pr-def.js"></script>
+    <!-- injeta o markup da nav (com ajustes de href e estilos injetados) -->
+    <script src="./assets/javascript/nav(globalcode).js"></script>
+    <!-- lógica do menu/search que depende de pr-def.js -->
+    <script src="./assets/javascript/nav.js"></script>
+    <script src="./assets/javascript/sys-ger-prod.js"></script>
+    <script src="./assets/javascript/search-results.js"></script>
+    <script src="./assets/javascript/footer(global).js"></script>
+
+
+    <style>
+       
+    </style>
+
+    <!-- Script para filtrar por categoria (exemplo básico) -->
+    <script>
+
+    </script>
+    <script src="./assets/javascript/categorias0x1.js"></script>
+    <script src="./assets/javascript/searchpage.js"></script>
+</body>
+
+</html>
